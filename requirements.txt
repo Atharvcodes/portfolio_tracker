@@ -1,0 +1,16 @@
+fastapi
+uvicorn[standard]
+
+psycopg2-binary
+
+pydantic
+pydantic[email]
+email-validator
+python-dotenv
+
+pyjwt
+bcrypt
+
+redis
+
+apscheduler
