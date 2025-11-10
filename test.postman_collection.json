@@ -1,8 +1,7 @@
 {
   "info": {
-    "name": "wealthwise_api_tests",
-    "_postman_id": "c3e4b001-2025-11-09",
-    "description": "Postman collection for Authentication, Users, Transactions, Prices, and Admin routes.",
+    "name": "WealthWise Portfolio Tracker - Complete API",
+    "description": "Complete API collection for testing the WealthWise Portfolio Tracker",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
   },
   "item": [
@@ -21,24 +20,19 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"name\": \"Atharv\",\n  \"email\": \"atharv@example.com\",\n  \"password\": \"your-secure-password\"\n}"
+              "raw": "{\n  \"name\": \"Atharv D\",\n  \"email\": \"atharv.auth@example.com\",\n  \"password\": \"securepass123\"\n}"
             },
             "url": {
-              "raw": "{{base_url}}/auth/register",
+              "raw": "http://localhost:8000/auth/register",
               "protocol": "http",
-              "host": [
-                "localhost"
-              ],
+              "host": ["localhost"],
               "port": "8000",
-              "path": [
-                "auth",
-                "register"
-              ]
+              "path": ["auth", "register"]
             }
           }
         },
         {
-          "name": "Login User",
+          "name": "Login",
           "request": {
             "method": "POST",
             "header": [
@@ -49,19 +43,34 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"email\": \"atharv@example.com\",\n  \"password\": \"your-secure-password\"\n}"
+              "raw": "{\n  \"email\": \"atharv.auth@example.com\",\n  \"password\": \"securepass123\"\n}"
             },
             "url": {
-              "raw": "{{base_url}}/auth/login",
+              "raw": "http://localhost:8000/auth/login",
               "protocol": "http",
-              "host": [
-                "localhost"
-              ],
+              "host": ["localhost"],
               "port": "8000",
-              "path": [
-                "auth",
-                "login"
-              ]
+              "path": ["auth", "login"]
+            }
+          }
+        },
+        {
+          "name": "Get Current User (Protected)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{access_token}}",
+                "description": "JWT token from login/register"
+              }
+            ],
+            "url": {
+              "raw": "http://localhost:8000/auth/me",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8000",
+              "path": ["auth", "me"]
             }
           }
         }
@@ -71,7 +80,7 @@
       "name": "Users",
       "item": [
         {
-          "name": "Create User (No Password)",
+          "name": "Create User",
           "request": {
             "method": "POST",
             "header": [
@@ -82,19 +91,28 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"name\": \"Test User 2\",\n  \"email\": \"test2@example.com\"\n}"
+              "raw": "{\n  \"name\": \"Atharv D\",\n  \"email\": \"atharv@example.com\"\n}"
             },
             "url": {
-              "raw": "{{base_url}}/users/create_user",
+              "raw": "http://localhost:8000/users/create_user",
               "protocol": "http",
-              "host": [
-                "localhost"
-              ],
+              "host": ["localhost"],
               "port": "8000",
-              "path": [
-                "users",
-                "create_user"
-              ]
+              "path": ["users", "create_user"]
+            }
+          }
+        },
+        {
+          "name": "Get User by ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8000/users/1",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8000",
+              "path": ["users", "1"]
             }
           }
         }
@@ -104,7 +122,7 @@
       "name": "Transactions",
       "item": [
         {
-          "name": "Create Transaction",
+          "name": "Record BUY Transaction",
           "request": {
             "method": "POST",
             "header": [
@@ -115,40 +133,103 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"user_id\": 1,\n  \"symbol\": \"TCS\",\n  \"transaction_type\": \"BUY\",\n  \"units\": 10,\n  \"price\": 3400.00,\n  \"transaction_date\": \"2025-01-10\"\n}"
+              "raw": "{\n  \"user_id\": 1,\n  \"symbol\": \"TCS\",\n  \"transaction_type\": \"BUY\",\n  \"units\": 10,\n  \"price\": 3200.00,\n  \"transaction_date\": \"2025-01-05\"\n}"
             },
             "url": {
-              "raw": "{{base_url}}/transactions",
+              "raw": "http://localhost:8000/transactions",
               "protocol": "http",
-              "host": [
-                "localhost"
-              ],
+              "host": ["localhost"],
               "port": "8000",
-              "path": [
-                "transactions"
+              "path": ["transactions"]
+            }
+          }
+        },
+        {
+          "name": "Record SELL Transaction",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"user_id\": 1,\n  \"symbol\": \"TCS\",\n  \"transaction_type\": \"SELL\",\n  \"units\": 3,\n  \"price\": 3400.00,\n  \"transaction_date\": \"2025-01-15\"\n}"
+            },
+            "url": {
+              "raw": "http://localhost:8000/transactions",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8000",
+              "path": ["transactions"]
+            }
+          }
+        },
+        {
+          "name": "Get All Transactions (by User)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8000/transactions?user_id=1",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8000",
+              "path": ["transactions"],
+              "query": [
+                {
+                  "key": "user_id",
+                  "value": "1"
+                }
               ]
             }
           }
         },
         {
-          "name": "Get Transaction History",
+          "name": "Get Transactions (by Symbol)",
           "request": {
             "method": "GET",
             "header": [],
             "url": {
-              "raw": "{{base_url}}/transactions?user_id=1",
+              "raw": "http://localhost:8000/transactions?user_id=1&symbol=TCS",
               "protocol": "http",
-              "host": [
-                "localhost"
-              ],
+              "host": ["localhost"],
               "port": "8000",
-              "path": [
-                "transactions"
-              ],
+              "path": ["transactions"],
               "query": [
                 {
                   "key": "user_id",
                   "value": "1"
+                },
+                {
+                  "key": "symbol",
+                  "value": "TCS"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get Transactions (by Type)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8000/transactions?user_id=1&transaction_type=BUY",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8000",
+              "path": ["transactions"],
+              "query": [
+                {
+                  "key": "user_id",
+                  "value": "1"
+                },
+                {
+                  "key": "transaction_type",
+                  "value": "BUY"
                 }
               ]
             }
@@ -165,15 +246,11 @@
             "method": "GET",
             "header": [],
             "url": {
-              "raw": "{{base_url}}/portfolio-summary?user_id=1",
+              "raw": "http://localhost:8000/portfolio-summary?user_id=1",
               "protocol": "http",
-              "host": [
-                "localhost"
-              ],
+              "host": ["localhost"],
               "port": "8000",
-              "path": [
-                "portfolio-summary"
-              ],
+              "path": ["portfolio-summary"],
               "query": [
                 {
                   "key": "user_id",
@@ -189,30 +266,30 @@
       "name": "Prices",
       "item": [
         {
-          "name": "Update Stock Price",
+          "name": "Get All Prices",
           "request": {
-            "method": "PUT",
-            "header": [
-              {
-                "key": "Content-Type",
-                "value": "application/json"
-              }
-            ],
-            "body": {
-              "mode": "raw",
-              "raw": "{\n  \"price\": 3500.25\n}"
-            },
+            "method": "GET",
+            "header": [],
             "url": {
-              "raw": "{{base_url}}/prices/TCS",
+              "raw": "http://localhost:8000/prices",
               "protocol": "http",
-              "host": [
-                "localhost"
-              ],
+              "host": ["localhost"],
               "port": "8000",
-              "path": [
-                "prices",
-                "TCS"
-              ]
+              "path": ["prices"]
+            }
+          }
+        },
+        {
+          "name": "Get Price by Symbol",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8000/prices/TCS",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8000",
+              "path": ["prices", "TCS"]
             }
           }
         }
@@ -222,20 +299,109 @@
       "name": "Admin",
       "item": [
         {
-          "name": "Trigger Price Update",
+          "name": "Update All Prices",
           "request": {
             "method": "POST",
             "header": [],
             "url": {
-              "raw": "{{base_url}}/admin/update-prices",
+              "raw": "http://localhost:8000/admin/update-prices",
               "protocol": "http",
-              "host": [
-                "localhost"
-              ],
+              "host": ["localhost"],
               "port": "8000",
-              "path": [
-                "admin",
-                "update-prices"
+              "path": ["admin", "update-prices"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Edge Cases & Validation",
+      "item": [
+        {
+          "name": "Sell More Than Owned (Should Fail)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"user_id\": 1,\n  \"symbol\": \"TCS\",\n  \"transaction_type\": \"SELL\",\n  \"units\": 1000,\n  \"price\": 3400.00,\n  \"transaction_date\": \"2025-01-20\"\n}"
+            },
+            "url": {
+              "raw": "http://localhost:8000/transactions",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8000",
+              "path": ["transactions"]
+            }
+          }
+        },
+        {
+          "name": "Invalid Symbol (Should Fail)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"user_id\": 1,\n  \"symbol\": \"INVALID\",\n  \"transaction_type\": \"BUY\",\n  \"units\": 10,\n  \"price\": 100.00,\n  \"transaction_date\": \"2025-01-01\"\n}"
+            },
+            "url": {
+              "raw": "http://localhost:8000/transactions",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8000",
+              "path": ["transactions"]
+            }
+          }
+        },
+        {
+          "name": "Duplicate Email (Should Fail)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Another User\",\n  \"email\": \"atharv@example.com\"\n}"
+            },
+            "url": {
+              "raw": "http://localhost:8000/users/create_user",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8000",
+              "path": ["users", "create_user"]
+            }
+          }
+        },
+        {
+          "name": "Non-existent User Portfolio (Should Fail)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8000/portfolio-summary?user_id=9999",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8000",
+              "path": ["portfolio-summary"],
+              "query": [
+                {
+                  "key": "user_id",
+                  "value": "9999"
+                }
               ]
             }
           }
@@ -245,19 +411,9 @@
   ],
   "variable": [
     {
-      "key": "base_url",
-      "value": "http://localhost:8000",
+      "key": "access_token",
+      "value": "",
       "type": "string"
     }
-  ],
-  "auth": {
-    "type": "bearer",
-    "bearer": [
-      {
-        "key": "token",
-        "value": "{{token}}",
-        "type": "string"
-      }
-    ]
-  }
+  ]
 }
